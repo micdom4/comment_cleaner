@@ -70,7 +70,8 @@ public class ReviewCommentsAction extends AnAction {
 
         switch (dialog.getExitCode()) {
             case CommentReviewDialog.REVIEW_EXIT_CODE:
-                Messages.showInfoMessage(project, "Review mode coming soon!", "Action");
+                SingleCommentReviewDialog reviewDialog = new SingleCommentReviewDialog(project, foundComments);
+                reviewDialog.show();
                 break;
 
             case CommentReviewDialog.DELETE_ALL_EXIT_CODE:
