@@ -1,4 +1,4 @@
-package pl.zzpj.plugin;
+package pl.zzpj.plugin.cc;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReviewCommentsAction extends AnAction {
+public class CommentCleanerAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
@@ -25,9 +25,9 @@ public class ReviewCommentsAction extends AnAction {
             return;
         }
 
-        List<PsiComment> foundComments = new ArrayList<>();
+        List<SmartPsiElementPointer<PsiComment>> detectedComments = new ArrayList<>();
 
-        ProgressManager.getInstance().run(new Task.Modal(project, "Scanning for Comments", true) {
+        ProgressManager.getInstance().run(new Task.Modal(project, "Searching for Comments", true) {
             @Override
             public void run(@NotNull ProgressIndicator indicator) {
                 indicator.setIndeterminate(true);
@@ -35,6 +35,8 @@ public class ReviewCommentsAction extends AnAction {
                 ReadAction.run(() -> {
                     PsiManager psiManager = PsiManager.getInstance(project);
                     ProjectFileIndex fileIndex = ProjectFileIndex.getInstance(project);
+
+                    SmartPointerManager pointerManager = SmartPointerManager.getInstance(project);
 
                     fileIndex.iterateContent(virtualFile -> {
                         indicator.checkCanceled();
@@ -47,7 +49,7 @@ public class ReviewCommentsAction extends AnAction {
                                     @Override
                                     public void visitElement(@NotNull PsiElement element) {
                                         if (element instanceof PsiComment) {
-                                            foundComments.add((PsiComment) element);
+                                            detectedComments.add(pointerManager.createSmartPsiElementPointer((PsiComment) element));
                                         }
                                         super.visitElement(element);
                                     }
@@ -60,27 +62,28 @@ public class ReviewCommentsAction extends AnAction {
             }
         });
 
-        if (foundComments.isEmpty()) {
-            Messages.showInfoMessage(project, "No comments found in the source files.", "Scan Complete");
+        if (detectedComments.isEmpty()) {
+            Messages.showInfoMessage(project, "No comments found in the source files. Your code doesn't need cleaning :)", "Search Complete");
             return;
         }
 
-        CommentReviewDialog dialog = new CommentReviewDialog(project, foundComments.size());
+        CommentCleanerDialog dialog = new CommentCleanerDialog(project, detectedComments.size());
         dialog.show();
 
         switch (dialog.getExitCode()) {
-            case CommentReviewDialog.REVIEW_EXIT_CODE:
-                SingleCommentReviewDialog reviewDialog = new SingleCommentReviewDialog(project, foundComments);
+            case CommentCleanerDialog.REVIEW_EXIT_CODE:
+                SingleCommentReviewDialog reviewDialog = new SingleCommentReviewDialog(project, detectedComments);
                 reviewDialog.show();
                 break;
 
-            case CommentReviewDialog.DELETE_ALL_EXIT_CODE:
+            case CommentCleanerDialog.DELETE_ALL_EXIT_CODE:
                 int[] deletedCount = {0};
 
                 WriteCommandAction.runWriteCommandAction(project, "Delete All Comments", "CommentReviewer", () -> {
-                    for (PsiComment comment : foundComments) {
+                    for (SmartPsiElementPointer<PsiComment> pointer : detectedComments) {
                         try {
-                            if (comment.isValid() && comment.isWritable()) {
+                            PsiComment comment = pointer.getElement();
+                            if (comment != null && comment.isValid() && comment.isWritable()) {
                                 comment.delete();
                                 deletedCount[0]++;
                             }
@@ -89,7 +92,7 @@ public class ReviewCommentsAction extends AnAction {
                     }
                 });
 
-                Messages.showInfoMessage(project, "Successfully deleted " + deletedCount[0] + " comments.", "Success");
+                Messages.showInfoMessage(project, "Successfully deleted " + deletedCount[0] + " comments. Your code is now clean ;)", "Success");
                 break;
 
             default:

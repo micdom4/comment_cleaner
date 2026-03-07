@@ -1,36 +1,28 @@
-<!-- Plugin Configuration File: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <!-- Unique identifier of the plugin. It should be FQN, cannot be changed between the plugin versions. -->
     <id>pl.zzpj.plugin</id>
 
-    <!-- Public plugin name should be written in Title Case.
-         Guidelines: https://plugins.jetbrains.com/docs/marketplace/best-practices-for-listing.html#plugin-name -->
-    <name>Plugin</name>
+    <name>Comment Cleaner</name>
 
-    <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-    <vendor url="https://www.yourcompany.com">YourCompany</vendor>
+    <vendor url="https://github.com/micdom4/comment_cleaner">Our GitHub</vendor>
 
-    <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
-         Guidelines: https://plugins.jetbrains.com/docs/marketplace/best-practices-for-listing.html#plugin-description -->
     <description><![CDATA[
-        Enter short description for your plugin here.<br>
-        <em>most HTML tags may be used</em>
+        Tired of deleting some suspicious-looking comments from "your" code before commit? If so, then this plugin is just for you.
+        <br>Comment Cleaner is a tool that helps developers in managing all comments in source files of their projects in an easy and convenient way.
+        It allows you to review every single comment in your code so that you can decide which one is "safe" and which should be deleted.
+        <br>Or you can simply just delete all the comments at once. It's better to be safe than sorry.
     ]]></description>
 
-    <!-- Product and plugin compatibility requirements.
-         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
 
     <resource-bundle>messages.MyMessageBundle</resource-bundle>
-    <!-- Extensions defined by the plugin.
-         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow id="MyToolWindow" factoryClass="pl.zzpj.plugin.MyToolWindowFactory"
+        <toolWindow id="MyToolWindow" factoryClass="pl.zzpj.plugin.cc.MyToolWindowFactory"
                     icon="AllIcons.Toolwindows.ToolWindowPalette"/>
     </extensions>
     <actions>
-        <action id="pl.zzpj.plugin.ReviewCommentsAction" class="pl.zzpj.plugin.ReviewCommentsAction"
-                text="Review Comments Action" description="Action that reviews comments">
+        <action id="pl.zzpj.plugin.cc.CommentCleanerAction" class="pl.zzpj.plugin.cc.CommentCleanerAction"
+                text="Comment Cleaner" description="Action that reviews and 'cleans' comments">
             <add-to-group group-id="CodeMenu" anchor="last"/>
         </action>
     </actions>

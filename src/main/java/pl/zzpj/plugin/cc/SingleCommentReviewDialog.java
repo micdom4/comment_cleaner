@@ -1,4 +1,4 @@
-package pl.zzpj.plugin;
+package pl.zzpj.plugin.cc;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
@@ -17,6 +17,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.PsiComment;
+import com.intellij.psi.SmartPsiElementPointer;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -27,13 +28,13 @@ import java.util.List;
 public class SingleCommentReviewDialog extends DialogWrapper {
 
     private final Project project;
-    private final List<PsiComment> comments;
+    private final List<SmartPsiElementPointer<PsiComment>> comments;
     private int currentIndex = 0;
 
     private JPanel centerPanel;
     private Editor currentEditor;
 
-    public SingleCommentReviewDialog(Project project, List<PsiComment> comments) {
+    public SingleCommentReviewDialog(Project project, List<SmartPsiElementPointer<PsiComment>> comments) {
         super(project, true);
         this.project = project;
         this.comments = comments;
@@ -79,9 +80,9 @@ public class SingleCommentReviewDialog extends DialogWrapper {
             return;
         }
 
-        PsiComment comment = comments.get(currentIndex);
+        PsiComment comment = comments.get(currentIndex).getElement();
 
-        if (!comment.isValid()) {
+        if (comment == null || !comment.isValid()) {
             currentIndex++;
             showCurrentComment();
             return;
@@ -140,8 +141,8 @@ public class SingleCommentReviewDialog extends DialogWrapper {
     }
 
     private void deleteCurrentComment() {
-        PsiComment comment = comments.get(currentIndex);
-        if (comment.isValid() && comment.isWritable()) {
+        PsiComment comment = comments.get(currentIndex).getElement();
+        if (comment != null && comment.isValid() && comment.isWritable()) {
             WriteCommandAction.runWriteCommandAction(project, "Delete Comment", "CommentReviewer", comment::delete);
         }
 

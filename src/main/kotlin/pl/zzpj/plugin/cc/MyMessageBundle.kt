@@ -1,4 +1,4 @@
-package pl.zzpj.plugin
+package pl.zzpj.plugin.cc
 
 import com.intellij.DynamicBundle
 import org.jetbrains.annotations.Nls
