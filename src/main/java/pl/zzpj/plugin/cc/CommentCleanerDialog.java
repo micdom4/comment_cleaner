@@ -3,6 +3,7 @@ package pl.zzpj.plugin.cc;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -29,10 +30,14 @@ public class CommentCleanerDialog extends DialogWrapper {
     @Override
     protected JComponent createCenterPanel() {
         JPanel dialogPanel = new JPanel(new BorderLayout());
-        JLabel label = new JLabel("<html>" +
-                "Found " + commentCount + " comments in the project source files. " +
-                "You can now either Delete All these comments or Review them one by one and decide what to do with each." +
-                "</html>");
+
+        JLabel label = new JLabel(
+            """
+            <html>
+            Found %d comments in the project source files. You can now either \
+            Delete All these comments or Review them one by one and decide what to do with each.
+            </html>
+            """.formatted(commentCount));
 
         label.setPreferredSize(new Dimension(400, 100));
         label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -43,13 +48,10 @@ public class CommentCleanerDialog extends DialogWrapper {
 
     @Override
     protected Action[] createActions() {
-        DialogWrapperAction reviewAction = new DialogWrapperAction("Review") {
-            @Override
-            protected void doAction(ActionEvent e) {
-                close(REVIEW_EXIT_CODE);
-            }
-        };
+        return new Action[]{getReviewAction(), getDeleteAllAction(), getCancelAction()};
+    }
 
+    private @NotNull DialogWrapperAction getDeleteAllAction() {
         DialogWrapperAction deleteAllAction = new DialogWrapperAction("Delete All") {
             @Override
             protected void doAction(ActionEvent e) {
@@ -66,7 +68,16 @@ public class CommentCleanerDialog extends DialogWrapper {
                 }
             }
         };
+        return deleteAllAction;
+    }
 
-        return new Action[]{reviewAction, deleteAllAction, getCancelAction()};
+    private @NotNull DialogWrapperAction getReviewAction() {
+        DialogWrapperAction reviewAction = new DialogWrapperAction("Review") {
+            @Override
+            protected void doAction(ActionEvent e) {
+                close(REVIEW_EXIT_CODE);
+            }
+        };
+        return reviewAction;
     }
 }
