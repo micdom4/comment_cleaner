@@ -14,12 +14,6 @@
 
     <depends>com.intellij.modules.platform</depends>
 
-    <resource-bundle>messages.MyMessageBundle</resource-bundle>
-
-    <extensions defaultExtensionNs="com.intellij">
-        <toolWindow id="MyToolWindow" factoryClass="pl.zzpj.plugin.cc.MyToolWindowFactory"
-                    icon="AllIcons.Toolwindows.ToolWindowPalette"/>
-    </extensions>
     <actions>
         <action id="pl.zzpj.plugin.cc.CommentCleanerAction" class="pl.zzpj.plugin.cc.CommentCleanerAction"
                 text="Comment Cleaner" description="Action that reviews and 'cleans' comments">
