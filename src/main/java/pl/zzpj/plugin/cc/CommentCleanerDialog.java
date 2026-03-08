@@ -2,6 +2,7 @@ package pl.zzpj.plugin.cc;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.ui.Messages;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -52,7 +53,17 @@ public class CommentCleanerDialog extends DialogWrapper {
         DialogWrapperAction deleteAllAction = new DialogWrapperAction("Delete All") {
             @Override
             protected void doAction(ActionEvent e) {
-                close(DELETE_ALL_EXIT_CODE);
+                int confirmationResult = Messages.showYesNoDialog(
+                        "Are you sure you want to delete all " + commentCount + " comments? This action cannot be undone.",
+                        "Confirm Delete All",
+                        "Delete All",
+                        "Cancel",
+                        Messages.getWarningIcon()
+                );
+
+                if (confirmationResult == Messages.YES) {
+                    close(DELETE_ALL_EXIT_CODE);
+                }
             }
         };
 
