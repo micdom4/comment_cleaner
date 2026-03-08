@@ -56,7 +56,7 @@ public class CommentCleanerDialog extends DialogWrapper {
             @Override
             protected void doAction(ActionEvent e) {
                 int confirmationResult = Messages.showYesNoDialog(
-                        "Are you sure you want to delete all " + commentCount + " comments? This action cannot be undone.",
+                        "Are you sure you want to delete all " + commentCount + " comments? You can still undo (Ctrl + z) this operation.",
                         "Confirm Delete All",
                         "Delete All",
                         "Cancel",
