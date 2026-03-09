@@ -11,7 +11,9 @@ Or you can simply just delete all the comments at once. It's better to be safe t
 
 ## Plugin Showcase
 
-There's gonna be a GIF or YouTube link presenting usage of our plugin
+Short video presenting the usage of Comment Cleaner plugin:
+
+![Comment Cleaner video showcase](assets/comment_cleaner_showcase.gif)
 
 ## Installation Guide
 
@@ -30,7 +32,7 @@ Follow these steps to build and install our plugin in your own IntelliJ IDEA ins
 2. In Gradle window navigate to: **comment_cleaner → Tasks → intellij platform → buildPlugin**.
 3. Run **buildPlugin** task by double-clicking on it.
 4. After this task expand **build** and then **distributions** directory. 
-If the Gradle build of the plugin was successful you should see ready-to-install plugin file called: **comment_cleaner-1.0.0.zip**
+If the Gradle build of the plugin was successful you should see ready-to-install plugin file named: **comment_cleaner-1.0.0.zip**
 
 ### 3. Install plugin in IntelliJ
 
@@ -44,7 +46,7 @@ The IntelliJ may warn you about potential danger of installing the so-called "th
 To verify that the plugin has been properly installed in your IntelliJ expand the **Code** tab.
 Then go with your cursor at the very bottom of this tab. 
 There you should see **Comment Cleaner** field.
-After clicking it, dialog windows of the plugin should pop up allowing you to fully use our plugin in your project!
+After clicking it, dialog window of the plugin should pop up allowing you to fully use our plugin in your project!
 
 **Congratulations!**
 Now you can safely use various "popular programming tools" without a worry that some overlooked suspicious comments will expose true source of "your" code ;).
