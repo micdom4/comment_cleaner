@@ -13,7 +13,7 @@ Or you can simply just delete all the comments at once. It's better to be safe t
 
 Short video presenting the usage of Comment Cleaner plugin:
 
-![Comment Cleaner video showcase](assets/comment_cleaner_showcase.gif)
+![Comment Cleaner video showcase](assets/comment_cleaner_showcase_better.gif)
 
 ## Installation Guide
 
