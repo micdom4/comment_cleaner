@@ -53,6 +53,6 @@ Now you can safely use various "popular programming tools" without a worry that 
 
 ## Authors
 
-251505 micdom4
+251505 [micdom4](https://github.com/micdom4)
 
-258681 Mxkyp
+258681 [Mxkyp](https://github.com/Mxkyp)
